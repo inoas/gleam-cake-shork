@@ -65,24 +65,16 @@ pub fn run_read_query(
   decoder decoder: fn(Dynamic) -> Result(a, List(DecodeError)),
   db_connection db_connection: Connection,
 ) {
-  let prp_stm = read_query_to_prepared_statement(query)
-  let sql = cake.get_sql(prp_stm)
-  let params = cake.get_params(prp_stm)
-
+  let prepared_statement = query |> read_query_to_prepared_statement
+  let sql_string = prepared_statement |> cake.get_sql
   let db_params =
-    params
-    |> list.map(fn(param: Param) -> Value {
-      case param {
-        BoolParam(param) -> pgo.bool(param)
-        FloatParam(param) -> pgo.float(param)
-        IntParam(param) -> pgo.int(param)
-        StringParam(param) -> pgo.text(param)
-        NullParam -> pgo.null()
-      }
-    })
+    prepared_statement
+    |> cake.get_params
+    |> list.map(with: cake_param_to_client_param)
 
   let result =
-    sql |> pgo.execute(on: db_connection, with: db_params, expecting: decoder)
+    sql_string
+    |> pgo.execute(on: db_connection, with: db_params, expecting: decoder)
 
   case result {
     Ok(pgo.Returned(_result_count, v)) -> Ok(v)
@@ -97,24 +89,16 @@ pub fn run_write_query(
   decoder decoder: fn(Dynamic) -> Result(a, List(DecodeError)),
   db_connection db_connection: Connection,
 ) -> Result(List(a), QueryError) {
-  let prp_stm = write_query_to_prepared_statement(query)
-  let sql = cake.get_sql(prp_stm)
-  let params = cake.get_params(prp_stm)
-
+  let prepared_statement = query |> write_query_to_prepared_statement
+  let sql_string = prepared_statement |> cake.get_sql
   let db_params =
-    params
-    |> list.map(fn(param: Param) -> Value {
-      case param {
-        BoolParam(param) -> pgo.bool(param)
-        FloatParam(param) -> pgo.float(param)
-        IntParam(param) -> pgo.int(param)
-        StringParam(param) -> pgo.text(param)
-        NullParam -> pgo.null()
-      }
-    })
+    prepared_statement
+    |> cake.get_params
+    |> list.map(with: cake_param_to_client_param)
 
   let result =
-    sql |> pgo.execute(on: db_connection, with: db_params, expecting: decoder)
+    sql_string
+    |> pgo.execute(on: db_connection, with: db_params, expecting: decoder)
 
   case result {
     Ok(pgo.Returned(_result_count, v)) -> Ok(v)
@@ -145,4 +129,14 @@ pub fn execute_raw_sql(
 ) -> Result(Returned(Dynamic), QueryError) {
   sql_string
   |> pgo.execute(on: db_connection, with: [], expecting: dynamic.dynamic)
+}
+
+fn cake_param_to_client_param(param param: Param) -> Value {
+  case param {
+    BoolParam(param) -> pgo.bool(param)
+    FloatParam(param) -> pgo.float(param)
+    IntParam(param) -> pgo.int(param)
+    StringParam(param) -> pgo.text(param)
+    NullParam -> pgo.null()
+  }
 }
