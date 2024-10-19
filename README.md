@@ -29,16 +29,24 @@ import cake/insert as i
 import cake/select as s
 import cake/where as w
 import gleam/dynamic
+import gleam/option.{None}
 
 const postgres_database_name = "my_postgres_database_name"
 
 pub fn main() {
-  postgres.with_connection(postgres_database_name, fn(db_connection) {
-    db_connection |> create_table_if_not_exists_birds
-    db_connection |> insert_into_table_birds
-    db_connection |> select_from_table_birds
-    db_connection |> delete_from_table_birds
-  })
+  postgres.with_connection(
+    host: "localhost",
+    port: 5432,
+    username: "postgres",
+    password: None,
+    database: postgres_database_name,
+    fn(db_connection) {
+      db_connection |> create_table_if_not_exists_birds
+      db_connection |> insert_into_table_birds
+      db_connection |> select_from_table_birds
+      db_connection |> delete_from_table_birds
+    }
+  )
 }
 
 fn create_table_if_not_exists_birds(db_connection) {

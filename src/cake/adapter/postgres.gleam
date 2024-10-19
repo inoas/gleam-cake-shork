@@ -12,20 +12,28 @@ import cake/param.{
 }
 import gleam/dynamic.{type DecodeError, type Dynamic}
 import gleam/list
-import gleam/option.{Some}
+import gleam/option.{type Option}
 import gleam/pgo.{type Connection, type QueryError, type Returned, type Value}
 
 /// Connection to a PostgreSQL database.
 ///
 /// This is a thin wrapper around the `gleam_pgo` library's `Connection` type.
 ///
-pub fn with_connection(database: String, callback: fn(Connection) -> a) -> a {
+pub fn with_connection(
+  host host: String,
+  port port: Int,
+  username username: String,
+  password password: Option(String),
+  database database: String,
+  callback callback: fn(Connection) -> a,
+) -> a {
   let connection =
     pgo.Config(
       ..pgo.default_config(),
-      host: "localhost",
-      user: "postgres",
-      password: Some("postgres"),
+      host: host,
+      port: port,
+      user: username,
+      password: password,
       database: database,
     )
     |> pgo.connect
@@ -39,9 +47,9 @@ pub fn with_connection(database: String, callback: fn(Connection) -> a) -> a {
 /// Convert a Cake `ReadQuery` to a `PreparedStatement`.
 ///
 pub fn read_query_to_prepared_statement(
-  query qry: ReadQuery,
+  query query: ReadQuery,
 ) -> PreparedStatement {
-  qry |> postgres_dialect.read_query_to_prepared_statement
+  query |> postgres_dialect.read_query_to_prepared_statement
 }
 
 /// Convert a Cake `WriteQuery` to a `PreparedStatement`.
@@ -132,8 +140,9 @@ pub fn run_query(
 }
 
 pub fn execute_raw_sql(
-  sql sql: String,
-  connection connection: Connection,
+  sql_string sql_string: String,
+  db_connection db_connection: Connection,
 ) -> Result(Returned(Dynamic), QueryError) {
-  sql |> pgo.execute(connection, with: [], expecting: dynamic.dynamic)
+  sql_string
+  |> pgo.execute(on: db_connection, with: [], expecting: dynamic.dynamic)
 }
