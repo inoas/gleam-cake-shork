@@ -1,0 +1,18 @@
+name = "cake_gleam_pgo"
+version = "1.0.0"
+description = "🎂Cake 🐘PostgreSQL adapter which which passes `PreparedStatement`s to the `gleam_pgo` library for execution written in Gleam."
+licences = ["MPL-2.0"]
+repository = { type = "github", user = "inoas", repo = "gleam-cake-gleam_pgo" }
+# links = [{ title = "Website", href = "https://gleam.run" }]
+
+gleam = ">= 1.4.0 and < 2.0.0"
+
+[documentation]
+pages = [
+  { title = "CHANGELOG", path = "changelog.html", source = "CHANGELOG.md" },
+]
+
+[dependencies]
+cake = ">= 2.0.0 and < 3.0.0"
+gleam_stdlib = ">= 0.40.0 and < 1.0.0"
+gleam_pgo = ">= 0.14.0 and < 1.0.0"
