@@ -4,6 +4,9 @@ import gleam/io
 ///
 @internal
 pub fn main() {
-  { "\n" <> "cake_pgo is an adapter library and cannot be invoked directly." }
+  {
+    "\n"
+    <> "cake_gleam_pgo is an adapter library and cannot be invoked directly."
+  }
   |> io.println
 }
