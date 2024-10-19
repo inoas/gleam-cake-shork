@@ -27,6 +27,7 @@ import cake/adapter/postgres
 import cake/delete as d
 import cake/insert as i
 import cake/select as s
+import cake/where as w
 import gleam/dynamic
 
 const postgres_database_name = "my_postgres_database_name"
