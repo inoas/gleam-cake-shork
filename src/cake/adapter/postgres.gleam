@@ -1,4 +1,4 @@
-//// 🎂Cake 🐘PostgreSQL adapter which which passes `PreparedStatement`s
+//// 🎂Cake 🐘PostgreSQL adapter which passes `PreparedStatement`s
 //// to the `gleam_pgo` library for execution.
 ////
 

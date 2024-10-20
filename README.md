@@ -9,7 +9,7 @@
 [![CI Test](https://github.com/inoas/gleam-cake-gleam_pgo/actions/workflows/test.yml/badge.svg?branch=main&amp;event=push)](https://github.com/inoas/gleam-cake-gleam_pgo/actions/workflows/test.yml)
 -->
 
-🎂[Cake](http://hex.pm/packages/cake) 🐘PostgreSQL adapter which which passes `PreparedStatement`s to the [gleam_pgo](http://hex.pm/packages/gleam_pgo) library for execution written in [Gleam](https://gleam.run/).
+🎂[Cake](http://hex.pm/packages/cake) 🐘PostgreSQL adapter which passes `PreparedStatement`s to the [gleam_pgo](http://hex.pm/packages/gleam_pgo) library for execution written in [Gleam](https://gleam.run/).
 
 ## Installation
 
