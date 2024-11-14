@@ -1,5 +1,5 @@
 //// 🎂Cake 🐘PostgreSQL adapter which passes `PreparedStatement`s
-//// to the `gleam_pgo` library for execution.
+//// to the `pog` library for execution.
 ////
 
 import cake.{
@@ -13,11 +13,11 @@ import cake/param.{
 import gleam/dynamic.{type DecodeError, type Dynamic}
 import gleam/list
 import gleam/option.{type Option}
-import gleam/pgo.{type Connection, type QueryError, type Returned, type Value}
+import pog.{type Connection, type QueryError, type Returned, type Value}
 
 /// Connection to a PostgreSQL database.
 ///
-/// This is a thin wrapper around the `gleam_pgo` library's `Connection` type.
+/// This is a thin wrapper around the `pog` library's `Connection` type.
 ///
 pub fn with_connection(
   host host: String,
@@ -28,18 +28,18 @@ pub fn with_connection(
   callback callback: fn(Connection) -> a,
 ) -> a {
   let connection =
-    pgo.Config(
-      ..pgo.default_config(),
+    pog.Config(
+      ..pog.default_config(),
       host: host,
       port: port,
       user: username,
       password: password,
       database: database,
     )
-    |> pgo.connect
+    |> pog.connect
 
   let value = callback(connection)
-  pgo.disconnect(connection)
+  pog.disconnect(connection)
 
   value
 }
@@ -63,7 +63,7 @@ pub fn write_query_to_prepared_statement(
 pub fn run_read_query(
   query query: ReadQuery,
   decoder decoder: fn(Dynamic) -> Result(a, List(DecodeError)),
-  db_connection db_connection: Connection,
+  db_connection on: Connection,
 ) {
   let prepared_statement = query |> read_query_to_prepared_statement
   let sql_string = prepared_statement |> cake.get_sql
@@ -74,10 +74,13 @@ pub fn run_read_query(
 
   let result =
     sql_string
-    |> pgo.execute(on: db_connection, with: db_params, expecting: decoder)
+    |> pog.query
+    |> pog_parameters(db_params:)
+    |> pog.returning(decoder)
+    |> pog.execute(on: on)
 
   case result {
-    Ok(pgo.Returned(_result_count, v)) -> Ok(v)
+    Ok(pog.Returned(_result_count, v)) -> Ok(v)
     Error(e) -> Error(e)
   }
 }
@@ -87,7 +90,7 @@ pub fn run_read_query(
 pub fn run_write_query(
   query query: WriteQuery(a),
   decoder decoder: fn(Dynamic) -> Result(a, List(DecodeError)),
-  db_connection db_connection: Connection,
+  db_connection on: Connection,
 ) -> Result(List(a), QueryError) {
   let prepared_statement = query |> write_query_to_prepared_statement
   let sql_string = prepared_statement |> cake.get_sql
@@ -98,10 +101,13 @@ pub fn run_write_query(
 
   let result =
     sql_string
-    |> pgo.execute(on: db_connection, with: db_params, expecting: decoder)
+    |> pog.query
+    |> pog_parameters(db_params:)
+    |> pog.returning(decoder)
+    |> pog.execute(on: on)
 
   case result {
-    Ok(pgo.Returned(_result_count, v)) -> Ok(v)
+    Ok(pog.Returned(_result_count, v)) -> Ok(v)
     Error(e) -> Error(e)
   }
 }
@@ -125,18 +131,29 @@ pub fn run_query(
 
 pub fn execute_raw_sql(
   sql_string sql_string: String,
-  db_connection db_connection: Connection,
-) -> Result(Returned(Dynamic), QueryError) {
+  db_connection on: Connection,
+) -> Result(Returned(Nil), QueryError) {
   sql_string
-  |> pgo.execute(on: db_connection, with: [], expecting: dynamic.dynamic)
+  |> pog.query
+  |> pog.execute(on:)
 }
 
 fn cake_param_to_client_param(param param: Param) -> Value {
   case param {
-    BoolParam(param) -> pgo.bool(param)
-    FloatParam(param) -> pgo.float(param)
-    IntParam(param) -> pgo.int(param)
-    StringParam(param) -> pgo.text(param)
-    NullParam -> pgo.null()
+    BoolParam(param) -> pog.bool(param)
+    FloatParam(param) -> pog.float(param)
+    IntParam(param) -> pog.int(param)
+    StringParam(param) -> pog.text(param)
+    NullParam -> pog.null()
   }
+}
+
+fn pog_parameters(
+  pog_query pg_qry: pog.Query(a),
+  db_params db_params: List(pog.Value),
+) -> pog.Query(a) {
+  db_params
+  |> list.fold(pg_qry, fn(pg_qry, db_param) {
+    pg_qry |> pog.parameter(db_param)
+  })
 }
