@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 <!-- ## [Unreleased] -->
 
+## [1.0.3] - 2024-11-14
+
+- Renamed library from `cake_gleam_pgo` to `cake_pog`.
+- Use `pog` instead of `gleam_pgo` as a gleam postgres client dependency.
+  - Adapt to breaking changes this move brought.
+
 ## [1.0.2] - 2024-11-03
 
 - Added omitted license file.

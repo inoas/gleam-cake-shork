@@ -1,20 +1,20 @@
-# Adapter between `cake` and `gleam_pgo`
+# Adapter between `cake` and `pog`
 
-[![Package <a href="https://github.com/inoas/gleam-cake-pgo/releases"><img src="https://img.shields.io/github/release/inoas/gleam-cake-gleam_pgo" alt="GitHub release"></a> Version](https://img.shields.io/hexpm/v/cake_gleam_pgo)](https://hex.pm/packages/cake_gleam_pgo)
+[![Package <a href="https://github.com/inoas/gleam-cake-pgo/releases"><img src="https://img.shields.io/github/release/inoas/gleam-cake-pog" alt="GitHub release"></a> Version](https://img.shields.io/hexpm/v/cake_pog)](https://hex.pm/packages/cake_pog)
 [![Erlang-compatible](https://img.shields.io/badge/target-erlang-b83998)](https://www.erlang.org/)
-[![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/cake_gleam_pgo/)
+[![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/cake_pog/)
 [![Discord](https://img.shields.io/discord/768594524158427167?label=discord%20chat&amp;color=5865F2)](https://discord.gg/Fm8Pwmy)
 
 <!--
-[![CI Test](https://github.com/inoas/gleam-cake-gleam_pgo/actions/workflows/test.yml/badge.svg?branch=main&amp;event=push)](https://github.com/inoas/gleam-cake-gleam_pgo/actions/workflows/test.yml)
+[![CI Test](https://github.com/inoas/gleam-cake-pog/actions/workflows/test.yml/badge.svg?branch=main&amp;event=push)](https://github.com/inoas/gleam-cake-pog/actions/workflows/test.yml)
 -->
 
-🎂[Cake](http://hex.pm/packages/cake) 🐘PostgreSQL adapter which passes `PreparedStatement`s to the [gleam_pgo](http://hex.pm/packages/gleam_pgo) library for execution written in [Gleam](https://gleam.run/).
+🎂[Cake](http://hex.pm/packages/cake) 🐘PostgreSQL adapter which passes `PreparedStatement`s to the [pog](http://hex.pm/packages/pog) library for execution written in [Gleam](https://gleam.run/).
 
 ## Installation
 
 ```sh
-gleam add cake_gleam_pgo@1
+gleam add cake_pog@1
 ```
 
 ## Example
@@ -93,3 +93,7 @@ fn delete_from_table_birds(db_connection) {
   |> io.debug
 }
 ```
+
+## History
+
+This used to be <https://github.com/inoas/gleam-cake-gleam_pgo>
