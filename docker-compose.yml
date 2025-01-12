@@ -12,7 +12,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=gleam_cake_postgres_test
+      - POSTGRES_DB=gleam_cake_pog_test
     ports:
       - "127.0.0.1:5432:5432"
     volumes:
