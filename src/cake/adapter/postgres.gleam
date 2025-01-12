@@ -10,7 +10,7 @@ import cake/dialect/postgres_dialect
 import cake/param.{
   type Param, BoolParam, FloatParam, IntParam, NullParam, StringParam,
 }
-import gleam/dynamic.{type DecodeError, type Dynamic}
+import gleam/dynamic/decode.{type Decoder}
 import gleam/list
 import gleam/option.{type Option}
 import pog.{type Connection, type QueryError, type Returned, type Value}
@@ -62,7 +62,7 @@ pub fn write_query_to_prepared_statement(
 
 pub fn run_read_query(
   query query: ReadQuery,
-  decoder decoder: fn(Dynamic) -> Result(a, List(DecodeError)),
+  decoder decoder: Decoder(a),
   db_connection on: Connection,
 ) {
   let prepared_statement = query |> read_query_to_prepared_statement
@@ -89,7 +89,7 @@ pub fn run_read_query(
 ///
 pub fn run_write_query(
   query query: WriteQuery(a),
-  decoder decoder: fn(Dynamic) -> Result(a, List(DecodeError)),
+  decoder decoder: Decoder(a),
   db_connection on: Connection,
 ) -> Result(List(a), QueryError) {
   let prepared_statement = query |> write_query_to_prepared_statement
@@ -118,7 +118,7 @@ pub fn run_write_query(
 ///
 pub fn run_query(
   query query: CakeQuery(a),
-  decoder decoder: fn(Dynamic) -> Result(a, List(DecodeError)),
+  decoder decoder: Decoder(a),
   db_connection db_connection: Connection,
 ) -> Result(List(a), QueryError) {
   case query {
