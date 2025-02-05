@@ -9,7 +9,7 @@
 [![CI Test](https://github.com/inoas/gleam-cake-shork/actions/workflows/test.yml/badge.svg?branch=main&amp;event=push)](https://github.com/inoas/gleam-cake-shork/actions/workflows/test.yml)
 -->
 
-🎂[Cake](http://hex.pm/packages/cake) 🦭MariaDB and 🐬MySQL adapters which pass `PreparedStatement`s to the [gmysql](http://hex.pm/packages/gmysql) library for execution written in [Gleam](https://gleam.run/).
+🎂[Cake](http://hex.pm/packages/cake) 🦭MariaDB and 🐬MySQL adapters which pass `PreparedStatement`s to the [shork](http://hex.pm/packages/shork) library for execution written in [Gleam](https://gleam.run/).
 
 ## Installation
 
