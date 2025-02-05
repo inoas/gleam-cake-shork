@@ -1,8 +1,10 @@
 import birdie
 import cake/adapter/maria
+import cake/adapter/mysql
 import cake/insert as i
 import pprint.{format as to_string}
 import test_helper/maria_test_helper
+import test_helper/mysql_test_helper
 
 // ┌───────────────────────────────────────────────────────────────────────────┐
 // │  Setup                                                                    │
@@ -19,30 +21,46 @@ fn insert_values_query() {
   |> i.to_query
 }
 
+fn insert_values_maria_mysql_query() {
+  // 🦭MariaDB and 🐬MySQL do not support `RETURNING` in `INSERT` queries:
+  insert_values()
+  |> i.no_returning
+  |> i.to_query
+}
+
 // ┌───────────────────────────────────────────────────────────────────────────┐
 // │  Test                                                                     │
 // └───────────────────────────────────────────────────────────────────────────┘
 
 pub fn insert_values_test() {
   let pgo = insert_values_query()
+  let lit = pgo
+  let mdb = insert_values_maria_mysql_query()
+  let myq = mdb
 
-  pgo
+  #(pgo, lit, mdb, myq)
   |> to_string
   |> birdie.snap("insert_values_test")
 }
 
 pub fn insert_values_prepared_statement_test() {
-  let pgo = insert_values_query() |> maria.write_query_to_prepared_statement
+  let mdb =
+    insert_values_maria_mysql_query() |> maria.write_query_to_prepared_statement
+  let myq =
+    insert_values_maria_mysql_query() |> mysql.write_query_to_prepared_statement
 
-  pgo
+  #(mdb, myq)
   |> to_string
   |> birdie.snap("insert_values_prepared_statement_test")
 }
 
 pub fn insert_values_execution_result_test() {
-  let pgo = insert_values_query() |> maria_test_helper.setup_and_run_write
+  let mdb =
+    insert_values_maria_mysql_query() |> maria_test_helper.setup_and_run_write
+  let myq =
+    insert_values_maria_mysql_query() |> mysql_test_helper.setup_and_run_write
 
-  pgo
+  #(mdb, myq)
   |> to_string
   |> birdie.snap("insert_values_execution_result_test")
 }
