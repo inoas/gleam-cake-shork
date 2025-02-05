@@ -14,9 +14,7 @@ import cake/param.{
 import gleam/dynamic/decode.{type Decoder}
 import gleam/list
 import gleam/option.{type Option, None, Some}
-
-// TODO Returend is miss-spelled, it should be Returned
-import shork.{type Connection, type QueryError, type Returend, type Value}
+import shork.{type Connection, type QueryError, type Returned, type Value}
 
 /// Connection to a PostgreSQL database.
 ///
@@ -78,11 +76,10 @@ pub fn run_read_query(
     |> shork.query
     |> shork_parameters(db_params:)
     |> shork.returning(decoder)
-    // |> shork.execute(on: on)
-    |> shork.execute(on)
+    |> shork.execute(on:)
 
   case result {
-    Ok(shork.Returend(_result_count, v)) -> Ok(v)
+    Ok(shork.Returned(_result_count, v)) -> Ok(v)
     Error(e) -> Error(e)
   }
 }
@@ -106,11 +103,10 @@ pub fn run_write_query(
     |> shork.query
     |> shork_parameters(db_params:)
     |> shork.returning(decoder)
-    // |> shork.execute(on: on)
-    |> shork.execute(on)
+    |> shork.execute(on:)
 
   case result {
-    Ok(shork.Returend(_result_count, v)) -> Ok(v)
+    Ok(shork.Returned(_result_count, v)) -> Ok(v)
     Error(e) -> Error(e)
   }
 }
@@ -135,11 +131,10 @@ pub fn run_query(
 pub fn execute_raw_sql(
   sql_string sql_string: String,
   db_connection on: Connection,
-) -> Result(Returend(Nil), QueryError) {
+) -> Result(Returned(Nil), QueryError) {
   sql_string
   |> shork.query
-  // |> shork.execute(on:)
-  |> shork.execute(on)
+  |> shork.execute(on:)
 }
 
 fn cake_param_to_client_param(param param: Param) -> Value {
@@ -148,8 +143,7 @@ fn cake_param_to_client_param(param param: Param) -> Value {
     FloatParam(param) -> shork.float(param)
     IntParam(param) -> shork.int(param)
     StringParam(param) -> shork.text(param)
-    NullParam -> panic as "NULLs not implemented"
-    // NullParam -> shork.null()
+    NullParam -> shork.null()
   }
 }
 
@@ -163,7 +157,6 @@ fn shork_parameters(
   })
 }
 
-// maybe_apply_some
 fn apply_option(builder: a, option: Option(b), function: fn(a, b) -> a) -> a {
   case option {
     Some(value) -> builder |> function(value)

@@ -21,7 +21,7 @@ packages = [
   { name = "mysql", version = "1.8.0", build_tools = ["make", "rebar3", "mix"], requirements = [], otp_app = "mysql", source = "hex", outer_checksum = "D473C479C19E5CDE20237458EEAD6673C3C00E0EF84AFD30615AEBBB67FEE7B3" },
   { name = "pprint", version = "1.0.4", build_tools = ["gleam"], requirements = ["glam", "gleam_stdlib"], otp_app = "pprint", source = "hex", outer_checksum = "C310A98BDC0995644847C3C8702DE19656D6BCD638B2A8A358B97824379ECAA1" },
   { name = "rank", version = "1.0.0", build_tools = ["gleam"], requirements = ["gleam_stdlib"], otp_app = "rank", source = "hex", outer_checksum = "5660E361F0E49CBB714CC57CC4C89C63415D8986F05B2DA0C719D5642FAD91C9" },
-  { name = "shork", version = "1.1.0", build_tools = ["gleam"], requirements = ["gleam_erlang", "gleam_stdlib", "mysql"], otp_app = "shork", source = "hex", outer_checksum = "039CE740238A698B24D7F156B8560C923185A1C16A0C6F80A5866F3A4DC2C03D" },
+  { name = "shork", version = "1.2.0", build_tools = ["gleam"], requirements = ["gleam_erlang", "gleam_stdlib", "mysql"], otp_app = "shork", source = "hex", outer_checksum = "2CF0E390799209D92B870F216AFF303ACD5250931AC4303D8A24277089E19773" },
   { name = "simplifile", version = "2.2.0", build_tools = ["gleam"], requirements = ["filepath", "gleam_stdlib"], otp_app = "simplifile", source = "hex", outer_checksum = "0DFABEF7DC7A9E2FF4BB27B108034E60C81BEBFCB7AB816B9E7E18ED4503ACD8" },
   { name = "trie_again", version = "1.1.2", build_tools = ["gleam"], requirements = ["gleam_stdlib"], otp_app = "trie_again", source = "hex", outer_checksum = "5B19176F52B1BD98831B57FDC97BD1F88C8A403D6D8C63471407E78598E27184" },
 ]
@@ -32,4 +32,4 @@ cake = { version = ">= 2.0.0 and < 3.0.0" }
 gleam_stdlib = { version = ">= 0.54.0 and < 1.0.0" }
 gleeunit = { version = ">= 1.3.0 and < 2.0.0" }
 pprint = { version = ">= 1.0.4 and < 2.0.0" }
-shork = { version = ">= 1.0.0 and < 2.0.0" }
+shork = { version = ">= 1.2.0 and < 2.0.0" }
