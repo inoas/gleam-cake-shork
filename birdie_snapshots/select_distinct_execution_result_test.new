@@ -2,4 +2,7 @@
 version: 1.2.5
 title: select_distinct_execution_result_test
 ---
-Ok([Null, #(0), #(1)])
+#(
+  Ok([Null, #(0), #(1)]),
+  Ok([Null, #(0), #(1)]),
+)
