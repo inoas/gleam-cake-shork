@@ -76,7 +76,7 @@ pub fn run_read_query(
     |> shork.query
     |> shork_parameters(db_params:)
     |> shork.returning(decoder)
-    |> shork.execute(on: on)
+    |> shork.execute(on:)
 
   case result {
     Ok(shork.Returned(_result_count, v)) -> Ok(v)
@@ -103,7 +103,7 @@ pub fn run_write_query(
     |> shork.query
     |> shork_parameters(db_params:)
     |> shork.returning(decoder)
-    |> shork.execute(on: on)
+    |> shork.execute(on:)
 
   case result {
     Ok(shork.Returned(_result_count, v)) -> Ok(v)
