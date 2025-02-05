@@ -14,6 +14,8 @@ import cake/param.{
 import gleam/dynamic/decode.{type Decoder}
 import gleam/list
 import gleam/option.{type Option, None, Some}
+
+// TODO Returend is miss-spelled, it should be Returned
 import shork.{type Connection, type QueryError, type Returend, type Value}
 
 /// Connection to a PostgreSQL database.
