@@ -1,28 +1,68 @@
 name: gleam-cake
 networks:
-  gleam-cake-pog-test:
-    name: gleam-cake-pog-test
+  gleam-cake-shork-test:
+    name: gleam-cake-shork-test
 services:
-  postgres:
-    container_name: gleam-cake-pog-test-postgres
-    networks:
-      - gleam-cake-pog-test
-    image: postgres:latest
+  mariadb:
+    container_name: gleam-cake-shork-test-mariadb
+    dns:
+      - 1.1.1.1
+      - 127.0.0.11
+    image: "mariadb:latest"
     restart: unless-stopped
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=gleam_cake_pog_test
+      MARIADB_DATABASE: "gleam_cake_test"
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: true
+      MYSQL_TCP_PORT: 3306
+      MARIADB_TCP_PORT: 3306
     ports:
-      - "127.0.0.1:5432:5432"
+      - "127.0.0.1:3307:3306"
     volumes:
-      - ./docker/data/postgres-data:/var/lib/postgresql/data
-      # - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      - ./docker/data/maria-data:/var/lib/mysql
+    command:
+      [
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_unicode_ci",
+        "--lower_case_table_names=1",
+      ]
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready", "-d", "gleam_cake_pog_test"]
-      interval: 30s
-      timeout: 60s
+      test: ["CMD", "/usr/local/bin/healthcheck.sh", "--innodb_initialized"]
+      start_period: 5s
+      timeout: 5s
+      interval: 5s
       retries: 5
-      start_period: 80s
+  mysql:
+    container_name: gleam-cake-shork-test-mysql
+    dns:
+      - 1.1.1.1
+      - 127.0.0.11
+    image: "mysql:latest"
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: "gleam_cake_test"
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
+      MYSQL_TCP_PORT: 3306
+    ports:
+      - "127.0.0.1:3308:3306"
+    volumes:
+      - ./docker/data/mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/healthcheck.sh", "--innodb_initialized"]
+      start_period: 5s
+      timeout: 5s
+      interval: 5s
+      retries: 5
+    command:
+      [
+        "mysqld",
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_unicode_ci",
+        "--lower_case_table_names=1",
+      ]
+    depends_on:
+      mariadb:
+        # condition: service_healthy
+        condition: service_started
+        restart: true
 volumes:
-  gleam-cake-pog-test:
+  gleam-cake-shork-test:

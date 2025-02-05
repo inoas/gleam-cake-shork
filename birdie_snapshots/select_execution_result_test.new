@@ -1,8 +1,6 @@
 ---
 version: 1.2.5
 title: select_execution_result_test
-file: ./test/cake_test/select_test.gleam
-test_name: select_execution_result_test
 ---
 Ok([
   #("Nubi", "hello", 4, 4),

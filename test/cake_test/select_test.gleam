@@ -1,9 +1,9 @@
 import birdie
-import cake/adapter/postgres
+import cake/adapter/maria
 import cake/fragment as f
 import cake/select as s
 import pprint.{format as to_string}
-import test_helper/postgres_test_helper
+import test_helper/maria_test_helper
 
 // ┌───────────────────────────────────────────────────────────────────────────┐
 // │  Setup                                                                    │
@@ -43,7 +43,7 @@ pub fn select_test() {
 }
 
 pub fn select_prepared_statement_test() {
-  let pgo = select_query() |> postgres.read_query_to_prepared_statement
+  let pgo = select_query() |> maria.read_query_to_prepared_statement
 
   pgo
   |> to_string
@@ -51,7 +51,7 @@ pub fn select_prepared_statement_test() {
 }
 
 pub fn select_execution_result_test() {
-  let pgo = select_query() |> postgres_test_helper.setup_and_run
+  let pgo = select_query() |> maria_test_helper.setup_and_run
 
   pgo
   |> to_string
@@ -65,7 +65,7 @@ pub fn select_distinct_test() {
 }
 
 pub fn select_distinct_prepared_statement_test() {
-  let pgo = select_distinct_query() |> postgres.read_query_to_prepared_statement
+  let pgo = select_distinct_query() |> maria.read_query_to_prepared_statement
 
   pgo
   |> to_string
@@ -73,7 +73,7 @@ pub fn select_distinct_prepared_statement_test() {
 }
 
 pub fn select_distinct_execution_result_test() {
-  let pgo = select_distinct_query() |> postgres_test_helper.setup_and_run
+  let pgo = select_distinct_query() |> maria_test_helper.setup_and_run
 
   pgo
   |> to_string

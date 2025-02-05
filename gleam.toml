@@ -1,23 +1,23 @@
-name = "cake_pog"
-version = "1.1.0"
-description = "🎂Cake 🐘PostgreSQL adapter which passes PreparedStatements to the pog library for execution written in Gleam."
+name = "cake_shork"
+version = "1.0.0"
+description = "🎂Cake 🦭MariaDB and 🐬MySQL adapters which pass PreparedStatements to the shork library for execution written in Gleam."
 licences = ["MPL-2.0"]
-repository = { type = "github", user = "inoas", repo = "gleam-cake-pog" }
+repository = { type = "github", user = "inoas", repo = "gleam-cake-shork" }
 # links = [{ title = "Website", href = "https://gleam.run" }]
 
 gleam = ">= 1.6.0"
 
 [documentation]
 pages = [
-    { title = "CHANGELOG", path = "changelog.html", source = "CHANGELOG.md" },
+  { title = "CHANGELOG", path = "changelog.html", source = "CHANGELOG.md" },
 ]
 
 [dependencies]
 cake = ">= 2.0.0 and < 3.0.0"
-gleam_stdlib = ">= 0.50.0 and < 2.0.0"
-pog = ">= 3.0.0 and < 4.0.0"
+shork = ">= 1.0.0 and < 2.0.0"
+gleam_stdlib = ">= 0.54.0 and < 1.0.0"
 
 [dev-dependencies]
 birdie = ">= 1.2.5 and < 2.0.0"
-gleeunit = ">= 1.2.0 and < 2.0.0"
+gleeunit = ">= 1.3.0 and < 2.0.0"
 pprint = ">= 1.0.4 and < 2.0.0"

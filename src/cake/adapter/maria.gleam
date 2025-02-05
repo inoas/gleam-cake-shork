@@ -1,45 +1,44 @@
-//// 🎂Cake 🐘PostgreSQL adapter which passes `PreparedStatement`s
-//// to the `pog` library for execution.
+//// 🎂Cake 🦭MariaDB adapter which passes `PreparedStatement`s
+//// to the `shork` library for execution.
 ////
 
 import cake.{
   type CakeQuery, type PreparedStatement, type ReadQuery, type WriteQuery,
   CakeReadQuery, CakeWriteQuery,
 }
-import cake/dialect/postgres_dialect
+
+import cake/dialect/maria_dialect
 import cake/param.{
   type Param, BoolParam, FloatParam, IntParam, NullParam, StringParam,
 }
 import gleam/dynamic/decode.{type Decoder}
 import gleam/list
-import gleam/option.{type Option}
-import pog.{type Connection, type QueryError, type Returned, type Value}
+import gleam/option.{type Option, None, Some}
+import shork.{type Connection, type QueryError, type Returend, type Value}
 
 /// Connection to a PostgreSQL database.
 ///
-/// This is a thin wrapper around the `pog` library's `Connection` type.
+/// This is a thin wrapper around the `shork` library's `Connection` type.
 ///
 pub fn with_connection(
   host host: String,
   port port: Int,
-  username username: String,
-  password password: Option(String),
+  username username: Option(String),
+  password password: String,
   database database: String,
   callback callback: fn(Connection) -> a,
 ) -> a {
   let connection =
-    pog.Config(
-      ..pog.default_config(),
-      host: host,
-      port: port,
-      user: username,
-      password: password,
-      database: database,
-    )
-    |> pog.connect
+    shork.default_config()
+    |> shork.host(host)
+    |> shork.port(port)
+    |> apply_option(username, shork.user)
+    |> shork.password(password)
+    |> shork.database(database)
+    |> shork.connect
 
   let value = callback(connection)
-  pog.disconnect(connection)
+  shork.disconnect(connection)
 
   value
 }
@@ -49,7 +48,7 @@ pub fn with_connection(
 pub fn read_query_to_prepared_statement(
   query query: ReadQuery,
 ) -> PreparedStatement {
-  query |> postgres_dialect.read_query_to_prepared_statement
+  query |> maria_dialect.read_query_to_prepared_statement
 }
 
 /// Convert a Cake `WriteQuery` to a `PreparedStatement`.
@@ -57,7 +56,7 @@ pub fn read_query_to_prepared_statement(
 pub fn write_query_to_prepared_statement(
   query query: WriteQuery(a),
 ) -> PreparedStatement {
-  query |> postgres_dialect.write_query_to_prepared_statement
+  query |> maria_dialect.write_query_to_prepared_statement
 }
 
 pub fn run_read_query(
@@ -74,13 +73,14 @@ pub fn run_read_query(
 
   let result =
     sql_string
-    |> pog.query
-    |> pog_parameters(db_params:)
-    |> pog.returning(decoder)
-    |> pog.execute(on: on)
+    |> shork.query
+    |> shork_parameters(db_params:)
+    |> shork.returning(decoder)
+    // |> shork.execute(on: on)
+    |> shork.execute(on)
 
   case result {
-    Ok(pog.Returned(_result_count, v)) -> Ok(v)
+    Ok(shork.Returend(_result_count, v)) -> Ok(v)
     Error(e) -> Error(e)
   }
 }
@@ -101,13 +101,14 @@ pub fn run_write_query(
 
   let result =
     sql_string
-    |> pog.query
-    |> pog_parameters(db_params:)
-    |> pog.returning(decoder)
-    |> pog.execute(on: on)
+    |> shork.query
+    |> shork_parameters(db_params:)
+    |> shork.returning(decoder)
+    // |> shork.execute(on: on)
+    |> shork.execute(on)
 
   case result {
-    Ok(pog.Returned(_result_count, v)) -> Ok(v)
+    Ok(shork.Returend(_result_count, v)) -> Ok(v)
     Error(e) -> Error(e)
   }
 }
@@ -132,28 +133,38 @@ pub fn run_query(
 pub fn execute_raw_sql(
   sql_string sql_string: String,
   db_connection on: Connection,
-) -> Result(Returned(Nil), QueryError) {
+) -> Result(Returend(Nil), QueryError) {
   sql_string
-  |> pog.query
-  |> pog.execute(on:)
+  |> shork.query
+  // |> shork.execute(on:)
+  |> shork.execute(on)
 }
 
 fn cake_param_to_client_param(param param: Param) -> Value {
   case param {
-    BoolParam(param) -> pog.bool(param)
-    FloatParam(param) -> pog.float(param)
-    IntParam(param) -> pog.int(param)
-    StringParam(param) -> pog.text(param)
-    NullParam -> pog.null()
+    BoolParam(param) -> shork.bool(param)
+    FloatParam(param) -> shork.float(param)
+    IntParam(param) -> shork.int(param)
+    StringParam(param) -> shork.text(param)
+    NullParam -> panic as "NULLs not implemented"
+    // NullParam -> shork.null()
   }
 }
 
-fn pog_parameters(
-  pog_query pg_qry: pog.Query(a),
-  db_params db_params: List(pog.Value),
-) -> pog.Query(a) {
+fn shork_parameters(
+  shork_query pg_qry: shork.Query(a),
+  db_params db_params: List(shork.Value),
+) -> shork.Query(a) {
   db_params
   |> list.fold(pg_qry, fn(pg_qry, db_param) {
-    pg_qry |> pog.parameter(db_param)
+    pg_qry |> shork.parameter(db_param)
   })
+}
+
+// maybe_apply_some
+fn apply_option(builder: a, option: Option(b), function: fn(a, b) -> a) -> a {
+  case option {
+    Some(value) -> builder |> function(value)
+    None -> builder
+  }
 }
