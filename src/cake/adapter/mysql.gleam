@@ -10,10 +10,9 @@ import cake/dialect/mysql_dialect
 import cake/param.{
   type Param, BoolParam, FloatParam, IntParam, NullParam, StringParam,
 }
-import cake_shork/internal/lib/optionx
 import gleam/dynamic/decode.{type Decoder}
 import gleam/list
-import gleam/option.{type Option}
+import gleam/option.{type Option, None, Some}
 import shork.{type Connection, type QueryError, type Returned, type Value}
 
 /// Connection to a MySQL database.
@@ -32,7 +31,7 @@ pub fn with_connection(
     shork.default_config()
     |> shork.host(host)
     |> shork.port(port)
-    |> optionx.apply(username, shork.user)
+    |> option_apply(username, shork.user)
     |> shork.password(password)
     |> shork.database(database)
     |> shork.connect
@@ -155,4 +154,15 @@ fn shork_parameters(
   |> list.fold(pg_qry, fn(pg_qry, db_param) {
     pg_qry |> shork.parameter(db_param)
   })
+}
+
+fn option_apply(
+  builder builder: a,
+  option option: Option(b),
+  function function: fn(a, b) -> a,
+) -> a {
+  case option {
+    Some(value) -> builder |> function(value)
+    None -> builder
+  }
 }
