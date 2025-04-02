@@ -6,7 +6,6 @@ import cake.{
   type CakeQuery, type PreparedStatement, type ReadQuery, type WriteQuery,
   CakeReadQuery, CakeWriteQuery,
 }
-
 import cake/dialect/maria_dialect
 import cake/param.{
   type Param, BoolParam, FloatParam, IntParam, NullParam, StringParam,
@@ -17,7 +16,7 @@ import gleam/list
 import gleam/option.{type Option}
 import shork.{type Connection, type QueryError, type Returned, type Value}
 
-/// Connection to a PostgreSQL database.
+/// Connection to a MariaDB database.
 ///
 /// This is a thin wrapper around the `shork` library's `Connection` type.
 ///
@@ -85,7 +84,7 @@ pub fn run_read_query(
   }
 }
 
-/// Run a Cake `WriteQuery` against an PostgreSQL database.
+/// Run a Cake `WriteQuery` against an MariaDB database.
 ///
 pub fn run_write_query(
   query query: WriteQuery(a),
@@ -112,7 +111,7 @@ pub fn run_write_query(
   }
 }
 
-/// Run a Cake `CakeQuery` against an PostgreSQL database.
+/// Run a Cake `CakeQuery` against an MariaDB database.
 ///
 /// This function is a wrapper around `run_read_query` and `run_write_query`.
 ///
