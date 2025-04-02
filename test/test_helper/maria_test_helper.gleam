@@ -3,7 +3,7 @@ import gleam/dynamic/decode
 import gleam/option.{Some}
 import test_support/test_data
 
-fn with_connection(callback callback) {
+fn with_local_test_connection(callback callback) {
   maria.with_connection(
     host: "localhost",
     port: 3307,
@@ -15,7 +15,7 @@ fn with_connection(callback callback) {
 }
 
 pub fn setup_and_run(query) {
-  use conn <- with_connection
+  use conn <- with_local_test_connection
 
   let _ = test_data.drop_owners_table_if_exists() |> maria.execute_raw_sql(conn)
   let _ = test_data.create_owners_table() |> maria.execute_raw_sql(conn)
@@ -33,7 +33,7 @@ pub fn setup_and_run(query) {
 }
 
 pub fn setup_and_run_write(query) {
-  use conn <- with_connection
+  use conn <- with_local_test_connection
 
   let _ = test_data.drop_owners_table_if_exists() |> maria.execute_raw_sql(conn)
   let _ = test_data.create_owners_table() |> maria.execute_raw_sql(conn)
