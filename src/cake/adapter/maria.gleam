@@ -6,18 +6,16 @@ import cake.{
   type CakeQuery, type PreparedStatement, type ReadQuery, type WriteQuery,
   CakeReadQuery, CakeWriteQuery,
 }
-
 import cake/dialect/maria_dialect
 import cake/param.{
   type Param, BoolParam, FloatParam, IntParam, NullParam, StringParam,
 }
-import cake_shork/internal/lib/optionx
 import gleam/dynamic/decode.{type Decoder}
 import gleam/list
-import gleam/option.{type Option}
+import gleam/option.{type Option, None, Some}
 import shork.{type Connection, type QueryError, type Returned, type Value}
 
-/// Connection to a PostgreSQL database.
+/// Connection to a MariaDB database.
 ///
 /// This is a thin wrapper around the `shork` library's `Connection` type.
 ///
@@ -33,7 +31,7 @@ pub fn with_connection(
     shork.default_config()
     |> shork.host(host)
     |> shork.port(port)
-    |> optionx.apply(username, shork.user)
+    |> option_apply(username, shork.user)
     |> shork.password(password)
     |> shork.database(database)
     |> shork.connect
@@ -85,13 +83,13 @@ pub fn run_read_query(
   }
 }
 
-/// Run a Cake `WriteQuery` against an PostgreSQL database.
+/// Run a Cake `WriteQuery` against an MariaDB database.
 ///
 pub fn run_write_query(
   query query: WriteQuery(a),
-  decoder decoder: Decoder(a),
+  decoder decoder: Decoder(b),
   db_connection on: Connection,
-) -> Result(List(a), QueryError) {
+) -> Result(List(b), QueryError) {
   let prepared_statement = query |> write_query_to_prepared_statement
   let sql_string = prepared_statement |> cake.get_sql
   let db_params =
@@ -112,7 +110,7 @@ pub fn run_write_query(
   }
 }
 
-/// Run a Cake `CakeQuery` against an PostgreSQL database.
+/// Run a Cake `CakeQuery` against an MariaDB database.
 ///
 /// This function is a wrapper around `run_read_query` and `run_write_query`.
 ///
@@ -156,4 +154,15 @@ fn shork_parameters(
   |> list.fold(pg_qry, fn(pg_qry, db_param) {
     pg_qry |> shork.parameter(db_param)
   })
+}
+
+fn option_apply(
+  builder builder: a,
+  option option: Option(b),
+  function function: fn(a, b) -> a,
+) -> a {
+  case option {
+    Some(value) -> builder |> function(value)
+    None -> builder
+  }
 }
