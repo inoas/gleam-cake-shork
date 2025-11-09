@@ -1,4 +1,4 @@
-name: gleam-cake
+name: gleam-cake-shork
 networks:
   gleam-cake-shork-test:
     name: gleam-cake-shork-test
