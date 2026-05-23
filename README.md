@@ -10,7 +10,6 @@
 [![Discord](https://img.shields.io/discord/768594524158427167?label=discord%20chat&amp;color=5865F2)](https://discord.gg/Fm8Pwmy)
 
 <br>
-<br>
 
 🎂[Cake](http://hex.pm/packages/cake) 🦭MariaDB and 🐬MySQL adapters which pass `PreparedStatement`s to the [shork](http://hex.pm/packages/shork) library for execution written in [Gleam](https://gleam.run/).
 
