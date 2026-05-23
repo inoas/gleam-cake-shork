@@ -175,4 +175,4 @@ fn delete_from_table_birds(db_connection) {
 ## History
 
 This is based on <https://github.com/inoas/gleam-cake-gleam_pgo>
-and This is based on <https://github.com/inoas/gleam-cake-gmysql>.
+and on <https://github.com/inoas/gleam-cake-gmysql>.
