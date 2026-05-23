@@ -6,6 +6,10 @@ and this project adheres to
 
 <!-- ## [Unreleased] -->
 
+## [1.5.0] - 2026-05-23
+
+- Permit cake `>= 2.2.0 and < 5.0.0`.
+
 ## [1.4.0] - 2026-04-30
 
 - Update deps.
@@ -24,7 +28,8 @@ and this project adheres to
 - Relaxed type arg.
 
 ## [1.1.0] - 2025-02-05
-- Updated `shork` to `1.2.0` and added support for SQL NULLs.
+
+- Updated `shork` to `1.2.0` and added support for SQL `NULL`s.
 
 ## [1.0.0] - 2025-02-05
 
