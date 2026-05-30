@@ -21,9 +21,9 @@ fn test_date() {
 }
 
 /// Helper to create a date InsertValue from a calendar.Date
-/// TODO: This uses cake/internal/write_query because cake/insert doesn't
-/// export an `insert.date()` function yet. Consider adding one in a future
-/// version of cake for consistency with insert.string(), insert.int(), etc.
+///
+/// FIXME: This uses cake/internal/write_query because cake/insert doesn't
+/// export an `insert.date()` function yet. Will be added in Cake 4.0
 fn date(value date: calendar.Date) -> i.InsertValue {
   param.date(date) |> write_query.InsertParam
 }
@@ -65,8 +65,12 @@ pub fn insert_with_date_prepared_statement_test() {
 }
 
 pub fn insert_with_date_execution_result_test() {
-  let mdb = insert_with_date_query() |> maria_test_helper.setup_and_run_write
-  let myq = insert_with_date_query() |> mysql_test_helper.setup_and_run_write
+  let mdb =
+    insert_with_date_query()
+    |> maria_test_helper.setup_and_run_write_with_events
+  let myq =
+    insert_with_date_query()
+    |> mysql_test_helper.setup_and_run_write_with_events
 
   #(mdb, myq)
   |> to_string
@@ -89,8 +93,10 @@ pub fn select_by_date_prepared_statement_test() {
 }
 
 pub fn select_by_date_execution_result_test() {
-  let mdb = select_by_date_query() |> maria_test_helper.setup_and_run
-  let myq = select_by_date_query() |> mysql_test_helper.setup_and_run
+  let mdb =
+    select_by_date_query() |> maria_test_helper.setup_and_run_with_events
+  let myq =
+    select_by_date_query() |> mysql_test_helper.setup_and_run_with_events
 
   #(mdb, myq)
   |> to_string
