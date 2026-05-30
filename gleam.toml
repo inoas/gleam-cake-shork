@@ -16,7 +16,7 @@ pages = [
 cake = ">= 2.2.0 and < 5.0.0"
 gleam_stdlib = ">= 0.71.0 and < 2.0.0"
 gleam_time = ">= 1.5.0 and < 2.0.0"
-shork = ">= 1.2.0 and < 2.0.0"
+shork = ">= 1.4.0 and < 2.0.0"
 
 [dev-dependencies]
 birdie = ">= 2.0.0 and < 3.0.0"

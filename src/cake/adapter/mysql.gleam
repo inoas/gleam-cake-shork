@@ -146,20 +146,7 @@ fn cake_param_to_client_param(param param: Param) -> Value {
     IntParam(param) -> shork.int(param)
     StringParam(param) -> shork.text(param)
     NullParam -> shork.null()
-    // Use shork's impl, once it is available
-    DateParam(param) -> {
-      let calendar.Date(year, month, day) = param
-      let year = year |> int.to_string |> string.pad_start(with: "0", to: 4)
-      let month =
-        month
-        |> calendar.month_to_int
-        |> int.to_string
-        |> string.pad_start(with: "0", to: 2)
-      let day = day |> int.to_string |> string.pad_start(with: "0", to: 2)
-      let date = year <> "-" <> month <> "-" <> day
-
-      date |> shork.text()
-    }
+    DateParam(param) -> shork.calendar_date(param)
   }
 }
 
