@@ -11,11 +11,8 @@ import cake/param.{
   type Param, BoolParam, DateParam, FloatParam, IntParam, NullParam, StringParam,
 }
 import gleam/dynamic/decode.{type Decoder}
-import gleam/int
 import gleam/list
 import gleam/option.{type Option, None, Some}
-import gleam/string
-import gleam/time/calendar
 import shork.{type Connection, type QueryError, type Returned, type Value}
 
 /// Connection to a MariaDB database.
