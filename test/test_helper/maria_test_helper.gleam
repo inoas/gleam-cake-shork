@@ -54,3 +54,23 @@ pub fn setup_and_run_write(query) {
 
   query |> maria.run_write_query(decode.dynamic, conn)
 }
+
+pub fn setup_and_run_events(query) {
+  use conn <- with_local_test_connection
+
+  let _ = test_data.drop_events_table_if_exists() |> maria.execute_raw_sql(conn)
+  let _ = test_data.create_events_table() |> maria.execute_raw_sql(conn)
+  let _ = test_data.insert_events_rows() |> maria.execute_raw_sql(conn)
+
+  query |> maria.run_read_query(decode.dynamic, conn)
+}
+
+pub fn setup_and_run_write_events(query) {
+  use conn <- with_local_test_connection
+
+  let _ = test_data.drop_events_table_if_exists() |> maria.execute_raw_sql(conn)
+  let _ = test_data.create_events_table() |> maria.execute_raw_sql(conn)
+  let _ = test_data.insert_events_rows() |> maria.execute_raw_sql(conn)
+
+  query |> maria.run_write_query(decode.dynamic, conn)
+}

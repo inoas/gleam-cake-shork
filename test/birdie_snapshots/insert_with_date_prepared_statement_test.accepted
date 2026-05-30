@@ -1,0 +1,28 @@
+---
+version: 2.0.0
+title: insert_with_date_prepared_statement_test
+---
+#(
+  PreparedStatement(
+    "?",
+    "INSERT INTO events (name, priority, date) VALUES (?, ?, ?)",
+    [
+      StringParam("Whiskers"),
+      IntParam(5),
+      DateParam(Date(2024, March, 15)),
+    ],
+    3,
+    Maria,
+  ),
+  PreparedStatement(
+    "?",
+    "INSERT INTO events (name, priority, date) VALUES (?, ?, ?)",
+    [
+      StringParam("Whiskers"),
+      IntParam(5),
+      DateParam(Date(2024, March, 15)),
+    ],
+    3,
+    Mysql,
+  ),
+)
