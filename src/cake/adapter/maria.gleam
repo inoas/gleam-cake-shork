@@ -145,8 +145,8 @@ fn cake_param_to_client_param(param param: Param) -> Value {
     IntParam(param) -> shork.int(param)
     BoolParam(param) -> shork.bool(param)
     FloatParam(param) -> shork.float(param)
-    NullParam -> shork.null()
     DateParam(param) -> shork.calendar_date(param)
+    NullParam -> shork.null()
   }
 }
 
