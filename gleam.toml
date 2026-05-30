@@ -1,5 +1,5 @@
 name = "cake_shork"
-version = "1.5.0"
+version = "1.5.1"
 description = "🎂Cake 🦭MariaDB and 🐬MySQL adapters which pass PreparedStatements to the shork library for execution written in Gleam."
 licences = ["MPL-2.0"]
 repository = { type = "github", user = "inoas", repo = "gleam-cake-shork" }
@@ -16,7 +16,7 @@ pages = [
 cake = ">= 2.2.0 and < 5.0.0"
 gleam_stdlib = ">= 0.71.0 and < 2.0.0"
 gleam_time = ">= 1.5.0 and < 2.0.0"
-shork = ">= 1.2.0 and < 2.0.0"
+shork = ">= 1.4.0 and < 2.0.0"
 
 [dev-dependencies]
 birdie = ">= 2.0.0 and < 3.0.0"

@@ -1,0 +1,28 @@
+---
+version: 2.0.0
+title: insert_with_date_test
+---
+InsertQuery(Insert(
+  InsertIntoTable("events"),
+  InsertColumns([
+    "name",
+    "priority",
+    "date",
+  ]),
+  NoInsertModifier,
+  InsertSourceRows([
+    InsertRow([
+      InsertParam(StringParam("Whiskers")),
+      InsertParam(IntParam(5)),
+      InsertParam(DateParam(Date(
+        2024,
+        March,
+        15,
+      ))),
+    ]),
+  ]),
+  InsertConflictError,
+  NoReturning,
+  NoEpilog,
+  NoComment,
+))

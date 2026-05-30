@@ -11,11 +11,8 @@ import cake/param.{
   type Param, BoolParam, DateParam, FloatParam, IntParam, NullParam, StringParam,
 }
 import gleam/dynamic/decode.{type Decoder}
-import gleam/int
 import gleam/list
 import gleam/option.{type Option, None, Some}
-import gleam/string
-import gleam/time/calendar
 import shork.{type Connection, type QueryError, type Returned, type Value}
 
 /// Connection to a MariaDB database.
@@ -141,25 +138,12 @@ pub fn execute_raw_sql(
 
 fn cake_param_to_client_param(param param: Param) -> Value {
   case param {
-    BoolParam(param) -> shork.bool(param)
-    FloatParam(param) -> shork.float(param)
-    IntParam(param) -> shork.int(param)
-    StringParam(param) -> shork.text(param)
+    StringParam(value) -> shork.text(value)
+    IntParam(value) -> shork.int(value)
+    FloatParam(value) -> shork.float(value)
     NullParam -> shork.null()
-    // Use shork's impl, once it is available
-    DateParam(param) -> {
-      let calendar.Date(year, month, day) = param
-      let year = year |> int.to_string |> string.pad_start(with: "0", to: 4)
-      let month =
-        month
-        |> calendar.month_to_int
-        |> int.to_string
-        |> string.pad_start(with: "0", to: 2)
-      let day = day |> int.to_string |> string.pad_start(with: "0", to: 2)
-      let date = year <> "-" <> month <> "-" <> day
-
-      date |> shork.text()
-    }
+    BoolParam(value) -> shork.bool(value)
+    DateParam(value) -> shork.calendar_date(value)
   }
 }
 

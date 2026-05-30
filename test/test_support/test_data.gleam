@@ -89,3 +89,23 @@ pub fn insert_counters_rows() {
     ('Clara', 9003, true)
   ;"
 }
+
+pub fn drop_events_table_if_exists() {
+  "DROP TABLE IF EXISTS events;"
+}
+
+pub fn create_events_table() {
+  "CREATE TABLE events (
+    name TEXT,
+    priority INT,
+    date DATE
+  );"
+}
+
+pub fn insert_events_rows() {
+  "INSERT INTO events (name, priority, date) VALUES
+    ('Birthday', 10, '2024-03-15'),
+    ('Meeting', 5, '2024-03-15'),
+    ('Deadline', 8, '2024-04-01')
+  ;"
+}

@@ -1,0 +1,29 @@
+---
+version: 2.0.0
+title: select_by_date_test
+---
+SelectQuery(Select(
+  SelectAll,
+  Selects([
+    SelectColumn("name"),
+    SelectColumn("date"),
+  ]),
+  FromTable("events"),
+  NoJoins,
+  WhereComparison(
+    WhereColumnValue("date"),
+    Equal,
+    WhereParamValue(DateParam(Date(
+      2024,
+      March,
+      15,
+    ))),
+  ),
+  NoGroupBy,
+  NoWhere,
+  NoOrderBy,
+  NoLimit,
+  NoOffset,
+  NoEpilog,
+  NoComment,
+))
