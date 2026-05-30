@@ -141,10 +141,10 @@ pub fn execute_raw_sql(
 
 fn cake_param_to_client_param(param param: Param) -> Value {
   case param {
+    StringParam(param) -> shork.text(param)
+    IntParam(param) -> shork.int(param)
     BoolParam(param) -> shork.bool(param)
     FloatParam(param) -> shork.float(param)
-    IntParam(param) -> shork.int(param)
-    StringParam(param) -> shork.text(param)
     NullParam -> shork.null()
     DateParam(param) -> shork.calendar_date(param)
   }
